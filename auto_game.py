@@ -44,7 +44,7 @@ def run():
 
 if __name__ == '__main__':
     connect()
-    for i in range(1):
+    for i in range(int(input('输入刷图次数'))):
         run()
         time.sleep(3)
         
