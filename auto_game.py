@@ -61,4 +61,4 @@ if __name__ == '__main__':
         time.sleep(3)'''
     run(int(input('输入刷图次数' + '\n')))
     os.system('adb kill-server')
-        
+
