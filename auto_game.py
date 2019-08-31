@@ -41,12 +41,14 @@ def run(n):
     #     time.sleep(5)
     while True:
         screenshot()
+        now = ''
         for image in images:
             if Image_to_position(image) != False:
                 print(image)
+                now = image
                 click(center[0], center[1])
-
-        if Image_to_position('end') != False :
+                
+        if now == 'end':
             round = round + 1
             if round == n:
                 break
@@ -58,5 +60,5 @@ if __name__ == '__main__':
         run()
         time.sleep(3)'''
     run(int(input('输入刷图次数' + '\n')))
-
+    os.system('adb kill-server')
         
