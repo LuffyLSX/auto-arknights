@@ -25,3 +25,9 @@ https://www.liaoxuefeng.com/wiki/1016959663602400/1016959856222624
 ![Image text](https://github.com/LuffyLSX/auto-arknights/blob/master/readme/demo.png)
 
 3.运行auto-game.py文件，输入要刷的次数即可
+
+# 更新日志
+
+2019-8-31
+
+1.0 增加了对2k以下分辨率的支持（仅限16:9）~~应该没有大佬用4k来玩吧~~
