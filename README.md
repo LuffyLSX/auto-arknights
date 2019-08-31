@@ -7,9 +7,16 @@
 
 之后我也会尽量适配1080p的分辨率，并添加其他的功能
 
+# 安装python并添加opencv模块
+
+https://www.liaoxuefeng.com/wiki/1016959663602400/1016959856222624
+
+打开cmd输入 pip install opencv-python
+
+
 # 如何使用
 
-使用之前要先安装python-opencv
+*使用之前要先安装python-opencv*
 
 1.将adb压缩包解压后的三个文件复制到C:\Windows 目录下
 
