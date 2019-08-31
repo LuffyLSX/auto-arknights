@@ -1,6 +1,10 @@
+# -*- coding:utf-8 -*-
+# @author：LuffyLSX
+# @version：1.0
+# @update time：2019/8/31
+
 import os,time
 import cv2
-
 
 def connect():
     try:
