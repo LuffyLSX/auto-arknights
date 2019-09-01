@@ -7,13 +7,27 @@
 
 之后我也会尽量适配1080p的分辨率，并添加其他的功能
 
+# 安装python并添加opencv模块
+
+https://www.liaoxuefeng.com/wiki/1016959663602400/1016959856222624
+
+打开cmd输入 pip install opencv-python
+![Image text](https://github.com/LuffyLSX/auto-arknights/blob/master/readme/demo2.png)
+如图显示表示安装成功
+
 # 如何使用
 
-使用之前要先安装python-opencv
+*使用之前要先安装python-opencv*
 
 1.将adb压缩包解压后的三个文件复制到C:\Windows 目录下
 
 2.打开模拟器并选择要刷的地图，注意要将代理指挥勾上√
-![Image text](https://github.com/LuffyLSX/auto-arknights/blob/master/demo.png)
+![Image text](https://github.com/LuffyLSX/auto-arknights/blob/master/readme/demo.png)
 
 3.运行auto-game.py文件，输入要刷的次数即可
+
+# 更新日志
+
+2019-8-31
+
+1.0 增加了对2k以下分辨率的支持（仅限16:9）~~应该没有大佬用4k来玩吧~~
