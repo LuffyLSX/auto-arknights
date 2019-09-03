@@ -81,6 +81,7 @@ def special_chapter_stage_1(x):
 
     return selet_special_chapter_stage_1[x]
 
+
 def of_f3(x):
 
     return 'end'
@@ -91,14 +92,12 @@ def of_f4(x):
 
 def special_chapter_stage_2(x):
     selet_special_chapter_stage_2 = {'3':'of_f3' ,'4':'of_f4'}
-    global screen_now
-    screen_now=selet_special_chapter_stage_2['']
+
     return selet_special_chapter_stage_2[x]
 
 def special_chapter(x):
     selet_special_chapter = {'':'special_chapter', '1':'special_chapter_stage_1', '2':'special_chapter_stage_2'}
-    global screen_now
-    screen_now=selet_special_chapter['']
+
     return selet_special_chapter[x]
 
 def chapter_start(x) :
