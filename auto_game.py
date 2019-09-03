@@ -112,47 +112,6 @@ def chapter_selet():#没有GUI暂时没什么乱用的自定义刷图线路模�
     if Image_to_position('prts_off') == True:#移动屏幕找最终目标关
         click(center[0], center[1])
 
-def chapter_selet():
-    #数组“字典”
-    Chinese_note =('没有GUI凑合用，活动511/3、524')
-
-    #没有GUi暂时没什么乱用的自定义刷图线路模块
-    chapter = ['chapter_start']
-    n = 1
-    print ('输入你要刷的关卡路线（回车进行下一步）\n ')
-    while True:#
-        print(Chinese_note)
-        
-        
-        b=input()
-        a=eval('chapter_list.'+str(chapter[n-1])+ "('%s')"  % b )
-        print(chapter_list)
-        print(a)
-        chapter.append (a)
-        print(chapter)
-        print(n)
-        if chapter[n]=='end':
-            chapter.pop
-            break 
-        
-        n=n+1
-
-    while True:
-        screenshot()
-        now=0
-        for image in chapter:
-            if Image_to_position(image) != False:
-                print(image)
-                now = now+1
-                click(center[0], center[1])
-        if now ==n:
-            break
-
-                
-                
-        
-
-
 
 def run(n):
     images = ['start-go1', 'start-go2', 'end', 'level up']
