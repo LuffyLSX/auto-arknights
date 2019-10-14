@@ -2,110 +2,215 @@
 
 __author__ = 'DSKaowu'
 
-screen_now = ()
+chapter_list=[]
+class chapter:
+    def __init__(self):
+        self.add1()
+    def add1(self):
+        global chapter_list
+        chapter_list.append('chapter_start')
+#二级目录
+class chapter_zx(chapter):
+    def __init__(self):
+        super(chapter_zx,self).__init__()
+        self.add2()
+    def add2(self):
+        global chapter_list
+        chapter_list.append('chapter_zx')
+        
+class chapter_wz(chapter):
+    def __init__(self):
+        super(chapter_wz,self).__init__()
+        self.add2()
+    def add2(self):
+        global chapter_list
+        chapter_list.append('chapter_wz')
+
+class chapter_xp(chapter):
+    def __init__(self):
+        super(chapter_xp,self).__init__()
+        self.add2()
+    def add2(self):
+        global chapter_list
+        chapter_list.append('chapter_xp')
+
+class chapter_jm(chapter):
+    def __init__(self):
+        super(chapter_jm,self).__init__()
+        self.add2()
+    def add2(self):
+        global chapter_list
+        chapter_list.append('chapter_jm')
+
+#三级目录
+
+class chapter_2(chapter_zx):
+    def __init__(self):
+        super(chapter_2,self).__init__()
+        self.add3()
+    def add3(self):
+        global chapter_list
+        chapter_list.append('chapter_2')
+class chapter_3(chapter_zx):
+    def __init__(self):
+        super(chapter_3,self).__init__()
+        self.add3()
+    def add3(self):
+        global chapter_list
+        chapter_list.append('chapter_3')
+class chapter_4(chapter_zx):
+    def __init__(self):
+        super(chapter_4,self).__init__()
+        self.add3()
+    def add3(self):
+        global chapter_list
+        chapter_list.append('chapter_4')
+class chapter_5(chapter_zx):
+    def __init__(self):
+        super(chapter_5,self).__init__()
+        self.add3()
+    def add3(self):
+        global chapter_list
+        chapter_list.append('chapter_5')
+
+#四级目录
+class chapter_2_10(chapter_2):
+    def __init__(self):
+        super(chapter_2_10,self).__init__()
+        self.add4()
+    def add4(self):
+        global chapter_list
+        chapter_list.append('chapter_2_10')
 
 
-def chapter_1():
-    pass
-def chapter_2():
-    pass
-def chapter_3():
-    pass
-def chapter_4():
-    pass
-def chapter_5():
-    pass
-def chapter_zx(x):
-    selet_chapter_zx = {'':'chapter_zx', '1':'chapter_1', '2':'chapter_2', '3':'chapter_3', '4':'chapter_4', '5':'chapter_5'}
-    global screen_now
-    screen_now=selet_chapter_zx['']
-    return selet_chapter_zx[x]
-def chapter_wz_yx():
-    pass
-def chapter_wz_hp():
-    pass
-def chapter_wz_t():
-    pass
-def chapter_wz_lmb():
-    pass
-def chapter_wz_book():
-    pass
-def chapter_wz(x):
-    selet_chapter_wz = {'':'chapter_wz', '1':'chapter_wz_yx', '2':'chapter_wz_hp', '3':'chapter_wz_t', '4':'chapter_wz_lmb', '5':'chapter_wz_book'}
-    global screen_now
-    screen_now=selet_chapter_wz['']
-    return selet_chapter_wz[x]
+class chapter_3_1(chapter_3):
+    def __init__(self):
+        super(chapter_3_1,self).__init__()
+        self.add4()
+    def add4(self):
+        global chapter_list
+        chapter_list.append('chapter_3_1')
+class chapter_3_2(chapter_3):
+    def __init__(self):
+        super(chapter_3_2,self).__init__()
+        self.add4()
+    def add4(self):
+        global chapter_list
+        chapter_list.append('chapter_3_2')
+class chapter_3_3(chapter_3):
+    def __init__(self):
+        super(chapter_3_3,self).__init__()
+        self.add4()
+    def add4(self):
+        global chapter_list
+        chapter_list.append('chapter_3_3')
+class chapter_3_4(chapter_3):
+    def __init__(self):
+        super(chapter_3_4,self).__init__()
+        self.add4()
+    def add4(self):
+        global chapter_list
+        chapter_list.append('chapter_3_4')
+class chapter_3_8(chapter_3):
+    def __init__(self):
+        super(chapter_3_8,self).__init__()
+        self.add4()
+    def add4(self):
+        global chapter_list
+        chapter_list.append('chapter_3_8')
 
-def chapter_xp_ssjj():
-    pass
-def chapter_xp_fzxf():
-    pass
-def chapter_xp_tzjw():
-    pass
-def chapter_xp_ylzz():
-    pass
 
-def chapter_xp(x):
-    selet_chapter_xp = {'':'chapter_xp', '1':'chapter_xp_ssjj', '2':'chapter_xp_fzxf', '3':'chapter_xp_tzjw', '4':'chapter_xp_ylzz'}
-    global screen_now
-    screen_now=selet_chapter_xp['']
-    return selet_chapter_xp[x]
+class chapter_S4_1(chapter_4):
+    def __init__(self):
+        super(chapter_S4_1,self).__init__()
+        self.add4()
+    def add4(self):
+        global chapter_list
+        chapter_list.append('chapter_S4_1')
+class chapter_S4_6(chapter_4):
+    def __init__(self):
+        super(chapter_S4_6,self).__init__()
+        self.add4()
+    def add4(self):
+        global chapter_list
+        chapter_list.append('chapter_S4_6')
+class chapter_4_2(chapter_4):
+    def __init__(self):
+        super(chapter_4_2,self).__init__()
+        self.add4()
+    def add4(self):
+        global chapter_list
+        chapter_list.append('chapter_4_2')
+class chapter_4_4(chapter_4):
+    def __init__(self):
+        super(chapter_4_4,self).__init__()
+        self.add4()
+    def add4(self):
+        global chapter_list
+        chapter_list.append('chapter_4_4')
+class chapter_4_5(chapter_4):
+    def __init__(self):
+        super(chapter_4_5,self).__init__()
+        self.add4()
+    def add4(self):
+        global chapter_list
+        chapter_list.append('chapter_4_5')
+class chapter_4_6(chapter_4):
+    def __init__(self):
+        super(chapter_4_6,self).__init__()
+        self.add4()
+    def add4(self):
+        global chapter_list
+        chapter_list.append('chapter_4_6')
+class chapter_4_7(chapter_4):
+    def __init__(self):
+        super(chapter_4_7,self).__init__()
+        self.add4()
+    def add4(self):
+        global chapter_list
+        chapter_list.append('chapter_4_7')
+class chapter_4_8(chapter_4):
+    def __init__(self):
+        super(chapter_4_8,self).__init__()
+        self.add4()
+    def add4(self):
+        global chapter_list
+        chapter_list.append('chapter_4_8')
+class chapter_4_9(chapter_4):
+    def __init__(self):
+        super(chapter_4_9,self).__init__()
+        self.add4()
+    def add4(self):
+        global chapter_list
+        chapter_list.append('chapter_4_9')
+class chapter_4_10(chapter_4):
+    def __init__(self):
+        super(chapter_4_10,self).__init__()
+        self.add4()
+    def add4(self):
+        global chapter_list
+        chapter_list.append('chapter_4_10')
 
-def chapter_jm_qc():
-    pass
-def chapter_jm_wh():
-    pass
-def chapter_jm_sq():
-    pass
-
-def chapter_jm(x):
-    selet_chapter_jm = {'':'chapter_jm', '1':'chapter_jm_qc', '2':'chapter_jm_wh', '3':'chapter_jm_sq'}
-    global screen_now
-    screen_now=selet_chapter_jm['']
-    return selet_chapter_jm[x]
-
-def of_6(x):
-
-    return 'end'
-
-def of_7(x):
-
-    return 'end'
-
-def of_8(x):
-
-    return 'end'
-
-def special_chapter_stage_1(x):
-    selet_special_chapter_stage_1 = {'6':'of_6' ,'7':'of_7' ,'8':'of_8'}
-    return selet_special_chapter_stage_1[x]
-
-def of_f3(x):
-    return 'end'
-
-def of_f4(x):
-
-    return 'end'
-
-def special_chapter_stage_2(x):
-    selet_special_chapter_stage_2 = {'3':'of_f3' ,'4':'of_f4'}
-
-    global screen_now
-    screen_now=selet_special_chapter_stage_2['']
-
-    return selet_special_chapter_stage_2[x]
-
-def special_chapter(x):
-    selet_special_chapter = {'':'special_chapter', '1':'special_chapter_stage_1', '2':'special_chapter_stage_2'}
-
-    global screen_now
-    screen_now=selet_special_chapter['']
-
-    return selet_special_chapter[x]
-
-def chapter_start(x) :
-    selet_chapter_start = {'':'chapter_start', '1':'chapter_zx' , '2':'chapter_wz' , '3':'chapter_xp' , '4':'chapter_jm' ,'5': 'special_chapter' }
-    global screen_now
-    screen_now=selet_chapter_start['']
-    return selet_chapter_start[x]#selet_chapter_start.get(x, 'end')()
+        
+class chapter_5_3(chapter_5):
+    def __init__(self):
+        super(chapter_5_3,self).__init__()
+        self.add4()
+    def add4(self):
+        global chapter_list
+        chapter_list.append('chapter_5_3')        
+class chapter_5_8(chapter_5):
+    def __init__(self):
+        super(chapter_5_8,self).__init__()
+        self.add4()
+    def add4(self):
+        global chapter_list
+        chapter_list.append('chapter_5_8')        
+class chapter_5_10(chapter_5):
+    def __init__(self):
+        super(chapter_5_10,self).__init__()
+        self.add4()
+    def add4(self):
+        global chapter_list
+        chapter_list.append('chapter_5_10')
 
