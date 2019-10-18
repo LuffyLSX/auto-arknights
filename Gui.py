@@ -8,7 +8,8 @@ import auto_game
 import threading
 import sys
 import os
-import time,re
+import time
+import re
 
 root = Tk()
 root.title("Auto_aknight")
@@ -236,12 +237,12 @@ def _add_mission():
 
     am = Toplevel()
     am.title('添加任务')
-    am.geometry('1100x200+0+%d' % (root.winfo_screenheight()/2))
+    am.geometry('595x90+0+%d' % (root.winfo_screenheight()/2))
     am.resizable(width=False, height=False)
-    im1 = PIL.Image.open('images/chapter_zx.png')
-    im2 = PIL.Image.open('images/chapter_wz.png')
-    im3 = PIL.Image.open('images/chapter_xp.png')
-    im4 = PIL.Image.open('images/chapter_jm.png')
+    im1 = PIL.Image.open('images/material/button_zx.png')
+    im2 = PIL.Image.open('images/material/button_wz.png')
+    im3 = PIL.Image.open('images/material/button_xp.png')
+    im4 = PIL.Image.open('images/material/button_jm.png')
     global img_zx, img_wz, img_xp, img_jm
     img_zx = ImageTk.PhotoImage(im1)
     img_wz = ImageTk.PhotoImage(im2)
@@ -276,25 +277,63 @@ def clean_mission():
     misson_sequence = 1
 
 
-def get_name(i): 
-    name=misson_list.get(i)
-    matchObj = re.match( r'(.*)](.*?) .*', name, re.M|re.I)
+def get_name(i):
+    name = misson_list.get(i-1)
+    matchObj = re.match(r'(.*)](.*?) .*', name, re.M | re.I)
+    get = str(matchObj.group(2))
+    get = get.replace('-', '_')
+    print(get)
+    return get
+
+
+def get_times(i):
+    name = misson_list.get(i-1)
+    matchObj = re.match(r'(.*)\s\^\s(.*)', name, re.M | re.I)
     print(matchObj.group(2))
-    return matchObj.group(2)
-def get_times(i): 
-    name=misson_list.get(i)
-    matchObj = re.match( r'(.*) ^ (.*?) .*', name, re.M|re.I)
-    print(matchObj.group(2))
-    return matchObj.group(2)
+    return int(matchObj.group(2))
 
 
 def star_mission():
-    auto_game.run_state='running'
-    num=misson_list.size()+1
-    for i in range(1,num):
-        auto_game.chapter_selet(get_name(i))
+    text_insert('任务开始\n')
+    # auto_game.run_state = 'ready'
+    auto_game.__running.set()  # 暂停信号
+    num = misson_list.size()+1
+    # print(num)
+    for i in range(1, num):
+        text_insert('现在是第%d个任务\n' % i)
+        _name = get_name(i)
+        auto_game.screenshot()
+        if auto_game.Image_to_position('chapter_' + _name) == False:
+            if (i == 1):
+                text_insert('回到首页\n')
+                auto_game.find_back()
+            elif (_name != get_name(i-1)):
+                text_insert('回到首页\n')
+                auto_game.find_back()
+            # auto_game.run_state = 'running'
+            auto_game.chapter_selet(_name)
+        else:
+            auto_game.click(auto_game.center[0], auto_game.center[1])
         auto_game.chapter_run(get_times(i))
-    auto_game.run_state='over'
+
+    text_insert('全部任务完成\n')
+    # auto_game.run_state = 'standby'
+
+
+def pause_mission():
+    auto_game.__running.clear()
+    text_insert('任务暂停\n')
+    button5_2 = Button(right_frame, text="恢复任务",
+                       command=restart_mission, padx=9, relief=GROOVE, bg='green')
+    button5_2.place(relx=0.4, rely=0.54, anchor=N)
+
+
+def restart_mission():
+    auto_game.__running.set()
+    text_insert('结束暂停\n')
+    button5_2 = Button(right_frame, text="暂停任务",
+                       command=pause_mission, padx=9, relief=GROOVE, bg='red')
+    button5_2.place(relx=0.4, rely=0.54, anchor=N)
 
 
 # 右侧部件
@@ -313,12 +352,12 @@ button2.place(relx=0.4, rely=0.24, anchor=N)
 button3 = Button(right_frame, text="清空任务",
                  command=clean_mission, padx=9, relief=GROOVE)
 button3.place(relx=0.4, rely=0.34, anchor=N)
-button4 = Button(right_frame, text="开始任务",
-                 command=clean_mission, padx=9, relief=GROOVE)
+button4 = Button(right_frame, text="开始任务", command=lambda: set_a_new_thread(
+    star_mission), padx=9, relief=GROOVE, bg='green')
 button4.place(relx=0.4, rely=0.44, anchor=N)
-button5 = Button(right_frame, text="暂停任务",
-                 command=clean_mission, padx=9, relief=GROOVE)
-button5.place(relx=0.4, rely=0.54, anchor=N)
+button5_1 = Button(right_frame, text="暂停任务",
+                   command=pause_mission, padx=9, relief=GROOVE, bg='red')
+button5_1.place(relx=0.4, rely=0.54, anchor=N)
 right_frame_1 = Frame(right_frame, width=80, height=100,
                       bg='#FFE4C4', relief=GROOVE, bd=3)
 right_frame_1.place(relx=0.41, rely=0.95, anchor=S)

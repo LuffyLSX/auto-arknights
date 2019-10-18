@@ -8,27 +8,32 @@ import time
 import cv2
 import chapter_list  # 字典
 import random
+import threading
 from subprocess import run
 
 random_time = random.uniform(1.0, 3.0)
 a = []
-run_state='not running'
+run_state = 'standby'
+__running = threading.Event()
+
 
 def click(x, y):
-    if run_state=='pause':
-        return
     os.popen('adb shell input tap %s %s' % (x, y))
-    time.sleep(0.5)
+    time.sleep(1.5)
 
 
 def swipe(x1, x2, y1, t):
     os.popen('adb shell input swipe %s %s %s %s %s' % (x1, y1, x2, y1, t))
+    time.sleep(2)
 
 
 def screenshot():
+    if __running.is_set() == False:
+        __running.wait()
     path = os.path.abspath('.') + '\images'
     run('adb shell screencap /data/screen.png', shell=True)
     run('adb pull /data/screen.png %s' % path, shell=True)
+    time.sleep(2)
 
 
 def resize_img(img_path):
@@ -60,6 +65,20 @@ def Image_to_position(image, m=0):
         return False
 
 
+def find_back():
+    chapter = ['back_2', 'back_1']
+    while True:
+        screenshot()
+        if Image_to_position('chapter_start'):
+            return
+        for image in chapter:
+            print(image)
+            if Image_to_position(image):
+                click(center[0], center[1])
+                if image == 'back_2':
+                    break
+
+
 def chapter_selet(chapter_name):  # 没有GUI暂时没什么乱用的自定义刷图线路模块
     """     Chinese_note = ('没有GUI凑合用，活动511/3、524，以任意字符结尾')
 
@@ -85,8 +104,11 @@ def chapter_selet(chapter_name):  # 没有GUI暂时没什么乱用的自定义�
     global a
     a = (int(input('输入刷图次数:'))) 
     """
-    chapter = chapter_name
-  # 点击模块
+
+    eval('chapter_list.chapter_'+str(chapter_name)+'()')
+    chapter = chapter_list.chapter_list
+    print(chapter)
+
     before_end = True
     while before_end:
         screenshot()
@@ -96,14 +118,17 @@ def chapter_selet(chapter_name):  # 没有GUI暂时没什么乱用的自定义�
                 click(center[0], center[1])
                 if image == chapter[-2]:
                     before_end = False
+                if Image_to_position(chapter[-1]):
+                    click(center[0], center[1])
+                    return
             elif image == 'chapter_zx':
                 print('如果屏幕有目标章节就不应该出现这句话')
                 img = cv2.imread('images/screen.png', 0)
                 swipe(10, img.shape[1]-10, img.shape[0]/2, 200)  # 屏幕移动至最左
-                time.sleep(2)
+
                 screenshot()
                 while Image_to_position(chapter[2]) == False:
-                    swipe(img.shape[1]/3, img.shape[1]/4, img.shape[0]/2, 500)
+                    swipe(img.shape[1]/2, img.shape[1]/5, img.shape[0]/2, 500)
                     time.sleep(3)
                     screenshot()
 
@@ -112,7 +137,6 @@ def chapter_selet(chapter_name):  # 没有GUI暂时没什么乱用的自定义�
         print('如果屏幕有目标关就不应该出现这句话')
         img = cv2.imread('images/screen.png', 0)
         swipe(10, img.shape[1]-10, img.shape[0]/2, 200)  # 屏幕移动至最左
-        time.sleep(2)
         screenshot()
         while Image_to_position(chapter[-1]) == False:
             swipe(img.shape[1]/2, img.shape[1]/4, img.shape[0]/2, 500)
@@ -121,7 +145,7 @@ def chapter_selet(chapter_name):  # 没有GUI暂时没什么乱用的自定义�
 
     print('find the level successfully')
     click(center[0], center[1])
-
+    chapter_list.chapter_list = []
     screenshot()
     if Image_to_position('prts_off'):  # 确认点上了代理
         click(center[0], center[1])
@@ -135,13 +159,17 @@ def chapter_run(n):
         time.sleep(random_time)
         now = ''
         for image in images:
-            if Image_to_position(image, m=0) != False:
+            if Image_to_position(image, m=0):
                 print(image)
                 now = image
                 time.sleep(3)
                 click(center[0], center[1])
-
-        if now == 'end'|'report':
+        if now == 'end':
             round += 1
+            time.sleep(2)
             if round == n:
                 break
+
+
+if __name__ == "__main__":
+    screenshot()
