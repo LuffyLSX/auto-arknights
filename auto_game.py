@@ -33,7 +33,7 @@ def screenshot():
     path = os.path.abspath('.') + '\images'
     run('adb shell screencap /data/screen.png', shell=True)
     run('adb pull /data/screen.png %s' % path, shell=True)
-    time.sleep(2)
+    time.sleep(1)
 
 
 def resize_img(img_path):
@@ -56,7 +56,7 @@ def Image_to_position(image, m=0):
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
     # print(max_val)
 
-    if max_val > 0.92:
+    if max_val > 0.89:
         global center
         center = (max_loc[0] + image_y / 2, max_loc[1] + image_x / 2)
         print(center)
@@ -122,15 +122,17 @@ def chapter_selet(chapter_name):  # 没有GUI暂时没什么乱用的自定义�
                     click(center[0], center[1])
                     return
             elif image == 'chapter_zx':
-                print('如果屏幕有目标章节就不应该出现这句话')
-                img = cv2.imread('images/screen.png', 0)
-                swipe(10, img.shape[1]-10, img.shape[0]/2, 200)  # 屏幕移动至最左
-
                 screenshot()
-                while Image_to_position(chapter[2]) == False:
-                    swipe(img.shape[1]/2, img.shape[1]/5, img.shape[0]/2, 500)
-                    time.sleep(3)
+                if Image_to_position(chapter[2]) == False:
+                    print('如果屏幕有目标章节就不应该出现这句话')
+                    img = cv2.imread('images/screen.png', 0)
+                    swipe(10, img.shape[1]-10, img.shape[0]/2, 200)  # 屏幕移动至最左
+
                     screenshot()
+                    while Image_to_position(chapter[2]) == False:
+                        swipe(img.shape[1]/2, img.shape[1]/5, img.shape[0]/2, 1000)
+                        time.sleep(2)
+                        screenshot()
 
     screenshot()
     if Image_to_position(chapter[-1]) == False:  # 移动屏幕找最终目标关

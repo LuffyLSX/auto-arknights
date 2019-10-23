@@ -19,7 +19,7 @@ mouse_coord = [0, 0]  # 初始化鼠标位置
 # y居中显示
 root.geometry('%dx%d+%d+%d' %
               (width, height, 0, (root.winfo_screenheight() - height) / 2))
-root.overrideredirect(True)
+# root.overrideredirect(True)
 root.resizable(width=False, height=False)
 root.config(bg='white')
 
@@ -32,21 +32,15 @@ label = Label(root, text="auto_knight", bg='#FFAEB9', fg='white',
 label.pack(fill=X, side='top')
 
 
-def shutdown():
-    root.destroy()
-
-
-button_shutdown = ttk.Button(label, text=" X ", command=shutdown,)
-button_shutdown.pack(side='right')
-
-
-def iconify():
-    root.overrideredirect(False)
-    root.iconify()
-
-
-button_iconify = ttk.Button(label, text=" — ", command=iconify)
-button_iconify.pack(side='right')
+# def shutdown():
+#     root.destroy()
+# button_shutdown = ttk.Button(label, text=" X ", command=shutdown,)
+# button_shutdown.pack(side='right')
+# def iconify():
+#     root.overrideredirect(False)
+#     root.iconify()
+# button_iconify = ttk.Button(label, text=" — ", command=iconify)
+# button_iconify.pack(side='right')
 # 左侧部件
 left_frame = Frame(width=500, height=470, bg='#FFE4C4')
 left_frame.pack(side='left')
@@ -121,8 +115,8 @@ def _add_mission():
         zx = Toplevel()
         zx.geometry('1144x610+0+%d' % ((root.winfo_screenheight()-610)/2))
         zx.resizable(width=False, height=False)
-        zx.overrideredirect(1)
-        im = PIL.Image.open('images/material.png')
+        # zx.overrideredirect(1)
+        im = PIL.Image.open('images/material/material.png')
         global img
         img = ImageTk.PhotoImage(im)
         mt = Canvas(zx, width=1200, height=610)
@@ -140,7 +134,7 @@ def _add_mission():
         ready2add = {}
 
         chapter_name = {0: '4-9', 1: '3-2', 2: '4-8', 3: '3-1', 4: 'S4-1', 5: '3-4', 6: '4-4', 7: '3-8', 8: '4-2',
-                        9: '4-7', 10: '4-5', 11: '4-10', 12: '5-3', 13: 'S4-6', 14: '2-10', 15: '3-3', 16: '4-6', 17: '5-8', 18: '5-10'}
+                        9: '4-7', 10: '4-5', 11: '4-10', 12: '5-3', 13: 'S4-6', 14: '2-10', 15: '3-3', 16: '4-6', 17: '5-8', 18: '5-10',19:'2-4'}
 
         def ready(_name, times):
             global misson_sequence
@@ -154,7 +148,7 @@ def _add_mission():
         spinbox = {}
         button_box = {}  # 字典批量生成19个spinbox和buttom
         xy = [[420, 47], [420, 104], [420, 162], [420, 282], [420, 338], [420, 396], [420, 454], [420, 511], [420, 569], [
-            600, 104], [600, 282], [600, 396], [600, 511], [730, 569], [780, 47], [780, 162], [780, 220], [780, 282], [780, 396]]
+            600, 104], [600, 282], [600, 396], [600, 511], [730, 569], [780, 47], [780, 162], [780, 220], [780, 282], [780, 396],[600,220]]
 
         def get_spin(i): return ready(i, spinbox[i].get())
         button_box[0] = ttk.Button(
@@ -195,7 +189,9 @@ def _add_mission():
             mt, image=img_b_plus, command=lambda: get_spin(17))
         button_box[18] = ttk.Button(
             mt, image=img_b_plus, command=lambda: get_spin(18))
-        for i in range(0, 19):
+        button_box[19] = ttk.Button(
+            mt, image=img_b_plus, command=lambda: get_spin(19))
+        for i in range(0, 20):
             spinbox[i] = ttk.Spinbox(mt, from_=1, to=99, increment=1, width=2)
             eval('spinbox['+str(i)+'].set(1)')  # 初始化spinbox
             button_box[i].place(x=((xy[i][0])+40), y=(xy[i][1])-4)
@@ -235,6 +231,364 @@ def _add_mission():
         ttk.Button(mt, text='×取消并返回上页',
                    command=add_cancel).place(x=1000, y=570)
 
+    def chapter_wz():
+        wz = Toplevel()
+        wz.geometry('300x370+0+%d' % ((root.winfo_screenheight()-370)/2))
+        wz.resizable(width=False, height=False)
+        b_plus = PIL.Image.open('images/material/plus.png')
+        global img_b_plus
+        img_b_plus = ImageTk.PhotoImage(b_plus)
+        ready2add = {}
+        chapter_name = {0: 'wz-ls-5', 1: 'wz-ca-3', 2: 'wz-ca-5', 3: 'wz-ce-5', 4: 'wz-ap-5', 5: 'wz-sk-3', 6: 'wz-sk-5'}
+        def ready(_name, times):
+            global misson_sequence
+            ready2add[misson_sequence] = '[' + \
+                str(misson_sequence)+']'+chapter_name[_name]+' ^ '+str(times)
+            st['state'] = 'normal'
+            st.insert('end', ready2add[misson_sequence]+'\n')
+            st['state'] = 'disabled'
+            misson_sequence += 1
+        label_frame={}
+        spinbox = {}
+        button_box = {}
+        def get_spin(i): return ready(i, spinbox[i].get())
+
+        label_frame[0]=ttk.LabelFrame(wz,width=150,height=10,text='狗粮本')
+        ttk.Label(label_frame[0],text='狗粮5').grid(column=0 ,row=0)
+        spinbox[0]=ttk.Spinbox(label_frame[0], from_=1, to=99, increment=1, width=2)
+        button_box[0] = ttk.Button(
+            label_frame[0], image=img_b_plus, command=lambda: get_spin(0))
+
+        label_frame[1]=ttk.LabelFrame(wz,width=150,height=10,text='技能书本')
+        ttk.Label(label_frame[1],text='二级书').grid(column=0 ,row=0)
+        spinbox[1]=ttk.Spinbox(label_frame[1], from_=1, to=99, increment=1, width=2)
+        button_box[1] = ttk.Button(
+            label_frame[1], image=img_b_plus, command=lambda: get_spin(1))
+        ttk.Label(label_frame[1],text='三级书').grid(column=0 ,row=1)
+        spinbox[2]=ttk.Spinbox(label_frame[1], from_=1, to=99, increment=1, width=2)
+        button_box[2] = ttk.Button(
+            label_frame[1], image=img_b_plus, command=lambda: get_spin(2))
+
+        label_frame[2]=ttk.LabelFrame(wz,width=150,height=10,text='龙门币本')
+        ttk.Label(label_frame[2],text='龙门币5').grid(column=0 ,row=0)
+        spinbox[3]=ttk.Spinbox(label_frame[2], from_=1, to=99, increment=1, width=2)
+        button_box[3] = ttk.Button(
+            label_frame[2], image=img_b_plus, command=lambda: get_spin(3))
+        
+        label_frame[3]=ttk.LabelFrame(wz,width=150,height=10,text='红票本')
+        ttk.Label(label_frame[3],text='红票5').grid(column=0 ,row=0)
+        spinbox[4]=ttk.Spinbox(label_frame[3], from_=1, to=99, increment=1, width=2)
+        button_box[4] = ttk.Button(
+            label_frame[3], image=img_b_plus, command=lambda: get_spin(4))
+
+        label_frame[4]=ttk.LabelFrame(wz,width=150,height=10,text='碳本')
+        ttk.Label(label_frame[4],text='二级碳').grid(column=0 ,row=0)
+        spinbox[5]=ttk.Spinbox(label_frame[4], from_=1, to=99, increment=1, width=2)
+        button_box[5] = ttk.Button(
+            label_frame[4], image=img_b_plus, command=lambda: get_spin(5))
+        ttk.Label(label_frame[4],text='三级碳').grid(column=0 ,row=1)
+        spinbox[6]=ttk.Spinbox(label_frame[4], from_=1, to=99, increment=1, width=2)
+        button_box[6] = ttk.Button(
+            label_frame[4], image=img_b_plus, command=lambda: get_spin(6))
+
+        label_frame[0].grid(column=0 ,row=0)
+        label_frame[1].grid(column=0 ,row=1)
+        label_frame[2].grid(column=0 ,row=2)
+        label_frame[3].grid(column=0 ,row=3)
+        label_frame[4].grid(column=0 ,row=4,rowspan=2)
+        spinbox[0].grid(column=1 ,row=0)
+        spinbox[1].grid(column=1 ,row=0)
+        spinbox[2].grid(column=1 ,row=1)
+        spinbox[3].grid(column=1 ,row=0)
+        spinbox[4].grid(column=1 ,row=0)
+        spinbox[5].grid(column=1 ,row=0)
+        spinbox[6].grid(column=1 ,row=1)
+        button_box[0].grid(column=2 ,row=0)
+        button_box[1].grid(column=2 ,row=0)
+        button_box[2].grid(column=2 ,row=1)
+        button_box[3].grid(column=2 ,row=0)
+        button_box[4].grid(column=2 ,row=0)
+        button_box[5].grid(column=2 ,row=0)
+        button_box[6].grid(column=2 ,row=1)
+        spinbox[0].set(1)
+        spinbox[1].set(1)
+        spinbox[2].set(1)
+        spinbox[3].set(1)
+        spinbox[4].set(1)
+        spinbox[5].set(1)
+        spinbox[6].set(1)
+
+
+        lf = ttk.LabelFrame(wz, text='ready2add', width=150, height=50)
+        lf.grid(column=3 ,row=0,rowspan=3)
+        st = scrolledtext.ScrolledText(lf, width=20, height=15)
+        st.grid(column=0 ,row=0)
+
+        def add_comfirm():
+            if messagebox.askyesno(message='确定添加关卡吗？', icon='question', title='确认', parent=wz):
+                for key in ready2add:
+                    misson_list.insert(END, ready2add[key])
+                wz.destroy()
+                am.destroy()
+                root.lift()
+
+        def add_cancel():
+            ready2add.clear()
+            st['state'] = 'normal'
+            st.delete('1.0', 'end')
+            st['state'] = 'disabled'
+            global misson_sequence
+            misson_sequence = 1
+            wz.destroy()
+
+        def add_rescind():
+            global misson_sequence
+            if misson_sequence == 1:
+                messagebox.showinfo(message="待添加列表为空")
+            else:
+                misson_sequence -= 1
+                del ready2add[misson_sequence]
+                st['state'] = 'normal'
+                st.delete('end-2 lines', 'end')
+                if misson_sequence != 1:
+                    st.insert('end', '\n')
+                st['state'] = 'disabled'
+        ttk.Button(wz, text='撤销添加', command=add_rescind).grid(column=3 ,row=3)
+        ttk.Button(wz, text='√添加完成', command=add_comfirm).grid(column=3 ,row=4)
+        ttk.Button(wz, text='×取消并返回上页',
+                   command=add_cancel).grid(column=3 ,row=5)
+
+
+
+    def chapter_pr():
+        pr = Toplevel()
+        pr.geometry('470x180+0+%d' % ((root.winfo_screenheight()-180)/2))
+        pr.resizable(width=False, height=False)
+        b_plus = PIL.Image.open('images/material/plus.png')
+        global img_b_plus
+        img_b_plus = ImageTk.PhotoImage(b_plus)
+        ready2add = {}
+        chapter_name = {0: 'pr-a-1', 1: 'pr-a-2', 2: 'pr-b-1', 3: 'pr-b-2', 4: 'pr-c-1', 5: 'pr-c-2', 6: 'pr-d-1',7:'pr-d-2'}
+        def ready(_name, times):
+            global misson_sequence
+            ready2add[misson_sequence] = '[' + \
+                str(misson_sequence)+']'+chapter_name[_name]+' ^ '+str(times)
+            st['state'] = 'normal'
+            st.insert('end', ready2add[misson_sequence]+'\n')
+            st['state'] = 'disabled'
+            misson_sequence += 1
+        label_frame={}
+        spinbox = {}
+        button_box = {}
+        def get_spin(i): return ready(i, spinbox[i].get())
+
+        
+        label_frame[0]=ttk.LabelFrame(pr,width=150,height=10,text='医疗重装')
+        ttk.Label(label_frame[0],text='蓝色').grid(column=0 ,row=0)
+        spinbox[0]=ttk.Spinbox(label_frame[0], from_=1, to=99, increment=1, width=2)
+        button_box[0] = ttk.Button(
+            label_frame[0], image=img_b_plus, command=lambda: get_spin(0))
+        ttk.Label(label_frame[0],text='紫色').grid(column=0 ,row=1)
+        spinbox[1]=ttk.Spinbox(label_frame[0], from_=1, to=99, increment=1, width=2)
+        button_box[1] = ttk.Button(
+            label_frame[0], image=img_b_plus, command=lambda: get_spin(1))
+
+        label_frame[1]=ttk.LabelFrame(pr,width=150,height=10,text='术士狙击')
+        ttk.Label(label_frame[1],text='蓝色').grid(column=0 ,row=0)
+        spinbox[2]=ttk.Spinbox(label_frame[1], from_=1, to=99, increment=1, width=2)
+        button_box[2] = ttk.Button(
+            label_frame[1], image=img_b_plus, command=lambda: get_spin(2))
+        ttk.Label(label_frame[1],text='紫色').grid(column=0 ,row=1)
+        spinbox[3]=ttk.Spinbox(label_frame[1], from_=1, to=99, increment=1, width=2)
+        button_box[3] = ttk.Button(
+            label_frame[1], image=img_b_plus, command=lambda: get_spin(3))
+
+        label_frame[2]=ttk.LabelFrame(pr,width=150,height=10,text='辅助先锋')
+        ttk.Label(label_frame[2],text='蓝色').grid(column=0 ,row=0)
+        spinbox[4]=ttk.Spinbox(label_frame[2], from_=1, to=99, increment=1, width=2)
+        button_box[4] = ttk.Button(
+            label_frame[2], image=img_b_plus, command=lambda: get_spin(4))
+        ttk.Label(label_frame[2],text='紫色').grid(column=0 ,row=1)
+        spinbox[5]=ttk.Spinbox(label_frame[2], from_=1, to=99, increment=1, width=2)
+        button_box[5] = ttk.Button(
+            label_frame[2], image=img_b_plus, command=lambda: get_spin(5))
+
+        label_frame[3]=ttk.LabelFrame(pr,width=150,height=10,text='特种近卫')
+        ttk.Label(label_frame[3],text='蓝色').grid(column=0 ,row=0)
+        spinbox[6]=ttk.Spinbox(label_frame[3], from_=1, to=99, increment=1, width=2)
+        button_box[6] = ttk.Button(
+            label_frame[3], image=img_b_plus, command=lambda: get_spin(6))
+        ttk.Label(label_frame[3],text='紫色').grid(column=0 ,row=1)
+        spinbox[7]=ttk.Spinbox(label_frame[3], from_=1, to=99, increment=1, width=2)
+        button_box[7] = ttk.Button(
+            label_frame[3], image=img_b_plus, command=lambda: get_spin(7))
+
+        label_frame[0].grid(column=0 ,row=0)
+        label_frame[1].grid(column=0 ,row=1,rowspan=2)
+        label_frame[2].grid(column=1 ,row=0)
+        label_frame[3].grid(column=1 ,row=1,rowspan=2)
+        spinbox[0].grid(column=1 ,row=0)
+        spinbox[1].grid(column=1 ,row=1)
+        spinbox[2].grid(column=1 ,row=0)
+        spinbox[3].grid(column=1 ,row=1)
+        spinbox[4].grid(column=1 ,row=0)
+        spinbox[5].grid(column=1 ,row=1)
+        spinbox[6].grid(column=1 ,row=0)
+        spinbox[7].grid(column=1 ,row=1)
+        button_box[0].grid(column=2 ,row=0)
+        button_box[1].grid(column=2 ,row=1)
+        button_box[2].grid(column=2 ,row=0)
+        button_box[3].grid(column=2 ,row=1)
+        button_box[4].grid(column=2 ,row=0)
+        button_box[5].grid(column=2 ,row=1)
+        button_box[6].grid(column=2 ,row=0)
+        button_box[7].grid(column=2 ,row=1)
+        spinbox[0].set(1)
+        spinbox[1].set(1)
+        spinbox[2].set(1)
+        spinbox[3].set(1)
+        spinbox[4].set(1)
+        spinbox[5].set(1)
+        spinbox[6].set(1)
+        spinbox[7].set(1)
+
+
+        lf = ttk.LabelFrame(pr, text='ready2add', width=150, height=50)
+        lf.grid(column=3 ,row=0,rowspan=3)
+        st = scrolledtext.ScrolledText(lf, width=20, height=10)
+        st.grid(column=0 ,row=0)
+
+        def add_comfirm():
+            if messagebox.askyesno(message='确定添加关卡吗？', icon='question', title='确认', parent=pr):
+                for key in ready2add:
+                    misson_list.insert(END, ready2add[key])
+                pr.destroy()
+                am.destroy()
+                root.lift()
+
+        def add_cancel():
+            ready2add.clear()
+            st['state'] = 'normal'
+            st.delete('1.0', 'end')
+            st['state'] = 'disabled'
+            global misson_sequence
+            misson_sequence = 1
+            pr.destroy()
+
+        def add_rescind():
+            global misson_sequence
+            if misson_sequence == 1:
+                messagebox.showinfo(message="待添加列表为空")
+            else:
+                misson_sequence -= 1
+                del ready2add[misson_sequence]
+                st['state'] = 'normal'
+                st.delete('end-2 lines', 'end')
+                if misson_sequence != 1:
+                    st.insert('end', '\n')
+                st['state'] = 'disabled'
+        ttk.Button(pr, text='撤销添加', command=add_rescind).grid(column=4 ,row=0)
+        ttk.Button(pr, text='√添加完成', command=add_comfirm).grid(column=4 ,row=1)
+        ttk.Button(pr, text='×取消并返回上页',
+                   command=add_cancel).grid(column=4 ,row=2)
+
+
+
+    def chapter_jm():
+        jm = Toplevel()
+        jm.geometry('350x180+0+%d' % ((root.winfo_screenheight()-180)/2))
+        jm.resizable(width=False, height=False)
+        b_plus = PIL.Image.open('images/material/plus.png')
+        global img_b_plus
+        img_b_plus = ImageTk.PhotoImage(b_plus)
+        ready2add = {}
+        chapter_name = {0: 'jm-qc', 1: 'jm-wh', 2: 'jm-sq'}
+        def ready(_name, times):
+            global misson_sequence
+            ready2add[misson_sequence] = '[' + \
+                str(misson_sequence)+']'+chapter_name[_name]+' ^ '+str(times)
+            st['state'] = 'normal'
+            st.insert('end', ready2add[misson_sequence]+'\n')
+            st['state'] = 'disabled'
+            misson_sequence += 1
+        label_frame={}
+        spinbox = {}
+        button_box = {}
+        def get_spin(i): return ready(i, spinbox[i].get())
+
+        
+        label_frame[0]=ttk.LabelFrame(jm,width=150,height=10,text='切城')
+        spinbox[0]=ttk.Spinbox(label_frame[0], from_=1, to=99, increment=1, width=2)
+        button_box[0] = ttk.Button(
+            label_frame[0], image=img_b_plus, command=lambda: get_spin(0))
+
+        label_frame[1]=ttk.LabelFrame(jm,width=150,height=10,text='龙门外环')
+        spinbox[1]=ttk.Spinbox(label_frame[1], from_=1, to=99, increment=1, width=2)
+        button_box[1] = ttk.Button(
+            label_frame[1], image=img_b_plus, command=lambda: get_spin(1))
+
+        label_frame[2]=ttk.LabelFrame(jm,width=150,height=10,text='龙门市区')
+        spinbox[2]=ttk.Spinbox(label_frame[2], from_=1, to=99, increment=1, width=2)
+        button_box[2] = ttk.Button(
+            label_frame[2], image=img_b_plus, command=lambda: get_spin(2))
+
+
+        label_frame[0].grid(column=0 ,row=0)
+        label_frame[1].grid(column=0 ,row=1)
+        label_frame[2].grid(column=0 ,row=2)
+
+        spinbox[0].grid(column=0 ,row=0)
+        spinbox[1].grid(column=0 ,row=0)
+        spinbox[2].grid(column=0 ,row=0)
+
+        button_box[0].grid(column=1 ,row=0)
+        button_box[1].grid(column=1 ,row=0)
+        button_box[2].grid(column=1 ,row=0)
+
+        spinbox[0].set(1)
+        spinbox[1].set(1)
+        spinbox[2].set(1)
+
+
+        lf = ttk.LabelFrame(jm, text='ready2add', width=150, height=50)
+        lf.grid(column=1 ,row=0,rowspan=3)
+        st = scrolledtext.ScrolledText(lf, width=20, height=10)
+        st.grid(column=0 ,row=0)
+
+        def add_comfirm():
+            if messagebox.askyesno(message='确定添加关卡吗？', icon='question', title='确认', parent=jm):
+                for key in ready2add:
+                    misson_list.insert(END, ready2add[key])
+                jm.destroy()
+                am.destroy()
+                root.lift()
+
+        def add_cancel():
+            ready2add.clear()
+            st['state'] = 'normal'
+            st.delete('1.0', 'end')
+            st['state'] = 'disabled'
+            global misson_sequence
+            misson_sequence = 1
+            jm.destroy()
+
+        def add_rescind():
+            global misson_sequence
+            if misson_sequence == 1:
+                messagebox.showinfo(message="待添加列表为空")
+            else:
+                misson_sequence -= 1
+                del ready2add[misson_sequence]
+                st['state'] = 'normal'
+                st.delete('end-2 lines', 'end')
+                if misson_sequence != 1:
+                    st.insert('end', '\n')
+                st['state'] = 'disabled'
+        ttk.Button(jm, text='撤销添加', command=add_rescind).grid(column=2 ,row=0)
+        ttk.Button(jm, text='√添加完成', command=add_comfirm).grid(column=2 ,row=1)
+        ttk.Button(jm, text='×取消并返回上页',
+                   command=add_cancel).grid(column=2 ,row=2)
+
     am = Toplevel()
     am.title('添加任务')
     am.geometry('595x90+0+%d' % (root.winfo_screenheight()/2))
@@ -249,9 +603,9 @@ def _add_mission():
     img_xp = ImageTk.PhotoImage(im3)
     img_jm = ImageTk.PhotoImage(im4)
     button1 = ttk.Button(am, image=img_zx, command=chapter_zx)
-    button2 = ttk.Button(am, image=img_wz)
-    button3 = ttk.Button(am, image=img_xp)
-    button4 = ttk.Button(am, image=img_jm)
+    button2 = ttk.Button(am, image=img_wz, command=chapter_wz)
+    button3 = ttk.Button(am, image=img_xp, command=chapter_pr)
+    button4 = ttk.Button(am, image=img_jm, command=chapter_jm)
     button1.grid(column=0, row=0)
     button2.grid(column=1, row=0)
     button3.grid(column=2, row=0)
@@ -302,6 +656,7 @@ def star_mission():
     for i in range(1, num):
         text_insert('现在是第%d个任务\n' % i)
         _name = get_name(i)
+        time.sleep(1)
         auto_game.screenshot()
         if auto_game.Image_to_position('chapter_' + _name) == False:
             if (i == 1):
@@ -371,31 +726,31 @@ def set_a_new_thread(fun_name, args_name=()):
 
 
 # root.winfo_x()获取当前窗口位置x
-def windows_move(event):
-    time.sleep(0.01)
-    root.geometry('%dx%d+%d+%d' % (width, height, (root.winfo_x()+(event.x -
-                                                                   mouse_coord[0])/2), (root.winfo_y()+(event.y-mouse_coord[1])/2)))
-    root.update()
+# def windows_move(event):
+#     time.sleep(0.01)
+#     root.geometry('%dx%d+%d+%d' % (width, height, (root.winfo_x()+(event.x -
+#                                                                    mouse_coord[0])/2), (root.winfo_y()+(event.y-mouse_coord[1])/2)))
+#     root.update()
 
 # 获取当前鼠标位置
 
 
-def get_mouse(event):
-    global mouse_coord
-    mouse_coord = [event.x, event.y]
-    print(mouse_coord)
+# def get_mouse(event):
+#     global mouse_coord
+#     mouse_coord = [event.x, event.y]
+#     print(mouse_coord)
 
 # frame.bind("<Motion>",callback),使用bind获取点击事件
 
 
-def monitor():
-    while True:
-        label.bind("<Button-1>", get_mouse)
-        label.bind("<B1-Motion>", windows_move)
-        label.update()
+# def monitor():
+#     while True:
+#         label.bind("<Button-1>", get_mouse)
+#         label.bind("<B1-Motion>", windows_move)
+#         label.update()
 
 
 root.update()
 
-set_a_new_thread(monitor)
+# set_a_new_thread(monitor)
 root.mainloop()
