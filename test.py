@@ -32,6 +32,10 @@ def Image_to_position(image, m=0):
         return False
 def click(x, y):
     os.popen('adb shell input tap %s %s' % (x, y))
+def swipe(x1, x2, y1, t):
+    os.popen('adb shell input swipe %s %s %s %s %s' % (x1, y1, x2, y1, t))
+    time.sleep(2)
+
 
 if __name__ == "__main__":
     # name = '[1]5-10 ^ 6'
@@ -40,7 +44,10 @@ if __name__ == "__main__":
     # path = os.path.abspath('.') + '\images'
     # run('adb shell screencap /data/screen.png', shell=True)
     # run('adb pull /data/screen.png %s' % path, shell=True)
-    Image_to_position('chapter_pr_2')
+    img = cv2.imread('images/screen.png', 0)
     # click(center[0],center[1])
+    swipe(img.shape[1]*0.9, img.shape[1]*0.1, img.shape[0]/2, 2000)
+    time.sleep(1)
+    print('finish')
 
     

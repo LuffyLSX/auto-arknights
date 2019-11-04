@@ -85,7 +85,7 @@ def connect():
     text_insert('正在尝试连接模拟器...大约需要10s...\n')
     button0_1['state'] = 'disabled'
     os.popen("adb kill-server", "r")
-    time.sleep(2)
+    time.sleep(1)
     f = os.popen("adb connect 127.0.0.1:7555", "r")
     console = f.read()
     f.close()
@@ -95,6 +95,9 @@ def connect():
         button0_2 = Button(right_frame, text="断开模拟器", command=lambda: set_a_new_thread(
             disconnect), padx=2, relief=GROOVE,)
         button0_2.place(relx=0.4, rely=0.04, anchor=N)
+        button4['state'] = 'normal'
+        button6['state'] = 'normal'
+
     else:
         text_insert('连接失败,请再次尝试\n')
         button0_1['state'] = 'normal'
@@ -660,8 +663,8 @@ def get_times(i):
     return int(matchObj.group(2))
 
 
-def star_mission():
-    text_insert('任务开始\n')
+def start_missions():
+    text_insert('多任务模式开始\n')
     # auto_game.run_state = 'ready'
     auto_game.__running.set()  # 暂停信号
     num = misson_list.size()+1
@@ -673,10 +676,10 @@ def star_mission():
         auto_game.screenshot()
         if auto_game.Image_to_position('chapter_' + _name) == False:
             if (i == 1):
-                text_insert('回到首页\n')
+                text_insert('不在目标关卡界面，检测是否在首页\n')
                 auto_game.find_back()
             elif (_name != get_name(i-1)):
-                text_insert('回到首页\n')
+                text_insert('与上个任务目标不同，回到首页\n')
                 auto_game.find_back()
             # auto_game.run_state = 'running'
             auto_game.chapter_selet(_name)
@@ -704,6 +707,38 @@ def restart_mission():
     button5_2.place(relx=0.4, rely=0.54, anchor=N)
 
 
+def go(n):
+    auto_game.__running.set()  # 暂停信号
+    text_insert('单任务循环开始\n')
+    auto_game.chapter_run(int(n))
+    text_insert('单任务循环完成\n')
+
+
+def single_mode():
+    a_mission = Toplevel()
+    a_mission.geometry('350x180+0+%d' % ((root.winfo_screenheight()-180)/2))
+    a_mission.resizable(width=False, height=False)
+    Label(a_mission, text='单任务模式需要手动选好要刷的图', font=("微软雅黑", 11),
+          anchor=W, justify=LEFT).grid(column=0, row=0, columnspan=2)
+    Label(a_mission, text='开始任务后自动帮你刷这个图n次', font=("微软雅黑", 11),
+          anchor=W, justify=LEFT).grid(column=0, row=1, columnspan=2)
+    sp1 = ttk.Spinbox(a_mission, from_=0, to=99, increment=1, width=2)
+    sp1.grid(column=0, row=2)
+    sp1.set(0)
+
+    def _start():
+        times = int(sp1.get())
+        if times > 0:
+            a_mission.destroy()
+            root.lift()
+            go(times)
+        else:
+            messagebox.showinfo(message="请设定循环次数")
+            a_mission.lift()
+    ttk.Button(a_mission, text='开始单任务循环',
+               command=lambda: set_a_new_thread(_start)).grid(column=1, row=2)
+
+
 # 右侧部件
 right_frame = Frame(width=100, height=470, bg='#FFE4C4')
 right_frame.pack(side='right')
@@ -721,19 +756,25 @@ button3 = Button(right_frame, text="清空任务",
                  command=clean_mission, padx=9, relief=GROOVE)
 button3.place(relx=0.4, rely=0.34, anchor=N)
 button4 = Button(right_frame, text="开始任务", command=lambda: set_a_new_thread(
-    star_mission), padx=9, relief=GROOVE, bg='green')
+    start_missions), padx=9, relief=GROOVE, bg='green')
 button4.place(relx=0.4, rely=0.44, anchor=N)
+button4['state'] = 'disabled'
 button5_1 = Button(right_frame, text="暂停任务",
                    command=pause_mission, padx=9, relief=GROOVE, bg='red')
 button5_1.place(relx=0.4, rely=0.54, anchor=N)
+button6 = Button(right_frame, text="单任务模式", command=single_mode,
+                 padx=3, relief=GROOVE, bg='yellow')
+button6.place(relx=0.4, rely=0.64, anchor=N)
+# button6['state']='disabled'
+
 right_frame_1 = Frame(right_frame, width=80, height=100,
                       bg='#FFE4C4', relief=GROOVE, bd=3)
 right_frame_1.place(relx=0.41, rely=0.95, anchor=S)
 # 新建线程
 
 
-def set_a_new_thread(fun_name, args_name=()):
-    th = threading.Thread(target=fun_name, args=args_name)
+def set_a_new_thread(fun_name, _args=()):
+    th = threading.Thread(target=fun_name, args=_args)
     th.setDaemon(True)  # 守护线程
     th.start()
 

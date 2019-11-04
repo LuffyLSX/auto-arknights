@@ -32,8 +32,9 @@ def screenshot():
         __running.wait()
     path = os.path.abspath('.') + '\images'
     run('adb shell screencap /data/screen.png', shell=True)
+    time.sleep(0.5)
     run('adb pull /data/screen.png %s' % path, shell=True)
-    time.sleep(1)
+    time.sleep(0.7)
 
 
 def resize_img(img_path):
@@ -79,31 +80,7 @@ def find_back():
                     break
 
 
-def chapter_selet(chapter_name):  # 没有GUI暂时没什么乱用的自定义刷图线路模块
-    """     Chinese_note = ('没有GUI凑合用，活动511/3、524，以任意字符结尾')
-
-    chapter = ['chapter_start']
-    n = 1
-    print('输入你要刷的关卡路线（回车进行下一步）\n ')
-    while True:  # 路线输入模块
-        print(Chinese_note)  # 未完成，用GUI代替
-
-        get_input = input()
-        get_the_chapter = eval(
-            'chapter_list.'+str(chapter[n-1]) + "('%s')" % get_input)
-        print(get_the_chapter)
-        chapter.append(get_the_chapter)
-        print(chapter)
-        print(n)
-        if chapter[n] == 'end':
-            chapter.pop()
-            print('去掉了end', chapter)
-            break
-        n = n+1
-
-    global a
-    a = (int(input('输入刷图次数:'))) 
-    """
+def chapter_selet(chapter_name):  # 刷图线路模块
 
     eval('chapter_list.chapter_'+str(chapter_name)+'()')
     chapter = chapter_list.chapter_list
@@ -130,7 +107,8 @@ def chapter_selet(chapter_name):  # 没有GUI暂时没什么乱用的自定义�
 
                     screenshot()
                     while Image_to_position(chapter[2]) == False:
-                        swipe(img.shape[1]/2, img.shape[1]/5, img.shape[0]/2, 1000)
+                        swipe(img.shape[1]/2, img.shape[1] /
+                              5, img.shape[0]/2, 1000)
                         time.sleep(2)
                         screenshot()
 
@@ -141,37 +119,73 @@ def chapter_selet(chapter_name):  # 没有GUI暂时没什么乱用的自定义�
         swipe(10, img.shape[1]-10, img.shape[0]/2, 200)  # 屏幕移动至最左
         screenshot()
         while Image_to_position(chapter[-1]) == False:
-            swipe(img.shape[1]/2, img.shape[1]/4, img.shape[0]/2, 500)
-            time.sleep(3)
+            swipe(img.shape[1]*0.9, img.shape[1]*0.1, img.shape[0]/2, 2000)
+            time.sleep(1)
             screenshot()
 
     print('find the level successfully')
     click(center[0], center[1])
     chapter_list.chapter_list = []
-    screenshot()
-    if Image_to_position('prts_off'):  # 确认点上了代理
-        click(center[0], center[1])
 
 
 def chapter_run(n):
-    images = ['start-go1', 'start-go2', 'end', 'level up', 'report']
+    screenshot()
+    if Image_to_position('prts_off'):  # 确认点上了代理
+        click(center[0], center[1])
+    images_ = ['start-go1', 'start-go2']
+    images = ['end', 'level up', 'report']
     round = 0
     while True:
-        screenshot()
-        time.sleep(random_time)
-        now = ''
-        for image in images:
-            if Image_to_position(image, m=0):
-                print(image)
-                now = image
-                time.sleep(3)
-                click(center[0], center[1])
-        if now == 'end':
-            round += 1
-            time.sleep(2)
-            if round == n:
+        while True:
+            screenshot()
+            now = ''
+            for image in images_:
+                if Image_to_position(image, m=0):
+                    print(image)
+                    now = image
+                    click(center[0], center[1])
+            if now == 'start-go2':
+                print('进入完成')
                 break
+
+        if round == 0:
+            time_start = time.perf_counter()
+            print('第一次循环')
+            while True:
+                time.sleep(random_time+8)
+                screenshot()
+                for image in images:
+                    if Image_to_position(image, m=0):
+                        print(image)
+                        now = image
+                        time.sleep(1)
+                        click(center[0], center[1])
+                if now == 'end':
+                    round += 1
+                    time.sleep(3)
+                    break
+            time_end = time.perf_counter()
+            time_wait = (time_end-time_start)
+            print(time_wait)
+        else:
+            print('待机开始')
+            time.sleep(time_wait)
+            while True:
+                screenshot()
+                for image in images:
+                    if Image_to_position(image, m=0):
+                        print(image)
+                        now = image
+                        time.sleep(2)
+                        click(center[0], center[1])
+                if now == 'end':
+                    round += 1
+                    time.sleep(1)
+                    break
+        if round == n:
+            break
 
 
 if __name__ == "__main__":
-    screenshot()
+    __running.set()
+    chapter_run(3)
