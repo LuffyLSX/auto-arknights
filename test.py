@@ -13,8 +13,8 @@ def resize_img(img_path):
     return cv2.resize(img1, size, interpolation=cv2.INTER_AREA)
 
 def Image_to_position(image, m=0):
-    image_path = 'D:/study/wait/finish/images/' + str(image) + '.png'
-    screen = cv2.imread('images/test/chapter_pr_d_.png', 0)
+    image_path = 'images/' + str(image) + '.png'
+    screen = cv2.imread('images/screen.png', 0)
     # template = cv2.imread(image_path, 0)
     template = resize_img(image_path)
     methods = [cv2.TM_CCOEFF_NORMED, cv2.TM_SQDIFF_NORMED, cv2.TM_CCORR_NORMED]
@@ -30,6 +30,7 @@ def Image_to_position(image, m=0):
         return center
     else:
         return False
+
 def click(x, y):
     os.popen('adb shell input tap %s %s' % (x, y))
 def swipe(x1, x2, y1, t):
@@ -42,12 +43,14 @@ if __name__ == "__main__":
     # matchObj = re.match(r'(.*)\s\^\s(.*)', name, re.M | re.I)
     # print(matchObj.group(2))
     # path = os.path.abspath('.') + '\images'
-    # run('adb shell screencap /data/screen.png', shell=True)
-    # run('adb pull /data/screen.png %s' % path, shell=True)
-    img = cv2.imread('images/screen.png', 0)
+    path = os.path.abspath('.') + '\images'
+    run('adb shell screencap /data/screen.png', shell=True)
+    run('adb pull /data/screen.png %s' % path, shell=True)
+    Image_to_position('prts_off')
+    # img = cv2.imread('images/screen.png', 0)
     # click(center[0],center[1])
-    swipe(img.shape[1]*0.9, img.shape[1]*0.1, img.shape[0]/2, 2000)
-    time.sleep(1)
-    print('finish')
+    # swipe(img.shape[1]*0.9, img.shape[1]*0.1, img.shape[0]/2, 2000)
+    # time.sleep(1)
+    # print('finish')
 
     

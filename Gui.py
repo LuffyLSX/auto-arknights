@@ -23,6 +23,10 @@ root.geometry('%dx%d+%d+%d' %
 root.resizable(width=False, height=False)
 root.config(bg='white')
 
+icon = PIL.Image.open('images/material/icon.ico')
+img_icon = ImageTk.PhotoImage(icon)
+root.iconphoto(root,img_icon)
+
 style = ttk.Style()
 style.map('TButton', background=[('disabled', '#d9d9d9'), ('active', '#FFFFFF')], foreground=[
           ('disabled', '#a3a3a3')], relief=[('pressed', '!disabled', 'sunken')])
@@ -31,31 +35,47 @@ label = Label(root, text="auto_knight", bg='#FFAEB9', fg='white',
               font=("微软雅黑", 14), anchor=W, justify=LEFT)
 label.pack(fill=X, side='top')
 
+def go(n):
+    auto_game.__running.set()  # 暂停信号
+    text_insert('单任务循环开始\n')
+    auto_game.chapter_run(int(n))
+    text_insert('单任务循环完成\n')
 
-# def shutdown():
-#     root.destroy()
-# button_shutdown = ttk.Button(label, text=" X ", command=shutdown,)
-# button_shutdown.pack(side='right')
-# def iconify():
-#     root.overrideredirect(False)
-#     root.iconify()
-# button_iconify = ttk.Button(label, text=" — ", command=iconify)
-# button_iconify.pack(side='right')
 # 左侧部件
 left_frame = Frame(width=500, height=470, bg='#FFE4C4')
 left_frame.pack(side='left')
-label_text = Label(
-    left_frame, text='--------------- 任务列表 ---------------', bg='#FFE4C4')
-label_text.place(relx=0.5, rely=0, anchor=N)
-misson_list = Listbox(left_frame, width=60, height=14, bd=2, relief=FLAT,)
-misson_list.place(relx=0.5, rely=0.04, anchor=N)
+left_top =Frame(left_frame,width=500, height=300, bg='#FFE4C4')
+left_top.grid(column=0,row=0,pady=2,padx=26)
+label_text = LabelFrame(
+    left_top, text='任务列表', bg='#FFE4C4',width=280, height=300)
+label_text.grid(column=0,row=0,padx=8)
+misson_list = Listbox(label_text, width=32, height=15, bd=2, relief=FLAT,)
+misson_list.pack()
 
-label_text2 = Label(
-    left_frame, text='---------------- 调试窗口 ----------------', bg='#FFE4C4')
-label_text2.place(relx=0.5, rely=0.62, anchor=N)
+label_text1 = LabelFrame(
+    left_top, text='单任务模式', bg='#FFE4C4',width=180, height=290)
+label_text1.grid(column=1,row=0,padx=18)
+sp1 = ttk.Spinbox(label_text1, from_=0, to=99, increment=1, width=2)
+sp1.grid(column=0, row=1,pady=20)
+sp1.set(0)
+def _start():
+    times = int(sp1.get())
+    if times > 0:
+        go(times)
+    else:
+        messagebox.showinfo(message="请设定循环次数")
+        root.lift()
+button7=ttk.Button(label_text1, text='开始单任务循环',
+           command=lambda: set_a_new_thread(_start))
+button7.grid(column=0, row=2,padx=20,pady=50)
+button7['state']='disabled'
+
+label_text2 = LabelFrame(
+    left_frame, text='调试窗口', bg='#FFE4C4',width=500, height=170)
+label_text2.grid(column=0,row=1,pady=6,padx=30)
 text2 = scrolledtext.ScrolledText(
-    left_frame, width=59, height=10, bd=2, relief=FLAT, wrap=NONE)
-text2.place(relx=0.5, rely=0.66, anchor=N)
+    label_text2, width=59, height=10, bd=2, relief=FLAT, wrap=NONE)
+text2.pack()
 text2.config(state=DISABLED)  # 默认设定为不可gai
 
 '''Y轴scroller，已被替代
@@ -93,10 +113,10 @@ def connect():
     if console.find('unable') == -1:
         text_insert('连接成功\n')
         button0_2 = Button(right_frame, text="断开模拟器", command=lambda: set_a_new_thread(
-            disconnect), padx=2, relief=GROOVE,)
+            disconnect), padx=2, relief=GROOVE,bg='#BC8F8F')
         button0_2.place(relx=0.4, rely=0.04, anchor=N)
         button4['state'] = 'normal'
-        button6['state'] = 'normal'
+        button7['state'] = 'normal'
 
     else:
         text_insert('连接失败,请再次尝试\n')
@@ -108,7 +128,7 @@ def disconnect():
     os.popen("adb kill-server", "r")
     text_insert('已停止adb server\n ')
     button0_1 = Button(right_frame, text="连接模拟器", command=lambda: set_a_new_thread(
-        connect), padx=2, relief=GROOVE,)
+        connect), padx=2, relief=GROOVE,bg='#8FBC8F')
     button0_1.place(relx=0.4, rely=0.04, anchor=N)
 
 
@@ -349,6 +369,7 @@ def _add_mission():
             st.delete('1.0', 'end')
             st['state'] = 'disabled'
             global misson_sequence
+
             misson_sequence = 1
             wz.destroy()
 
@@ -707,11 +728,6 @@ def restart_mission():
     button5_2.place(relx=0.4, rely=0.54, anchor=N)
 
 
-def go(n):
-    auto_game.__running.set()  # 暂停信号
-    text_insert('单任务循环开始\n')
-    auto_game.chapter_run(int(n))
-    text_insert('单任务循环完成\n')
 
 
 def single_mode():
@@ -722,28 +738,14 @@ def single_mode():
           anchor=W, justify=LEFT).grid(column=0, row=0, columnspan=2)
     Label(a_mission, text='开始任务后自动帮你刷这个图n次', font=("微软雅黑", 11),
           anchor=W, justify=LEFT).grid(column=0, row=1, columnspan=2)
-    sp1 = ttk.Spinbox(a_mission, from_=0, to=99, increment=1, width=2)
-    sp1.grid(column=0, row=2)
-    sp1.set(0)
-
-    def _start():
-        times = int(sp1.get())
-        if times > 0:
-            a_mission.destroy()
-            root.lift()
-            go(times)
-        else:
-            messagebox.showinfo(message="请设定循环次数")
-            a_mission.lift()
-    ttk.Button(a_mission, text='开始单任务循环',
-               command=lambda: set_a_new_thread(_start)).grid(column=1, row=2)
+    
 
 
 # 右侧部件
 right_frame = Frame(width=100, height=470, bg='#FFE4C4')
 right_frame.pack(side='right')
 button0_1 = Button(right_frame, text="连接模拟器", command=lambda: set_a_new_thread(
-    connect), padx=2, relief=GROOVE,)
+    connect), padx=2, relief=GROOVE,bg='#8FBC8F')
 button0_1.place(relx=0.4, rely=0.04, anchor=N)
 
 button1 = Button(right_frame, text="增加任务",
@@ -756,20 +758,25 @@ button3 = Button(right_frame, text="清空任务",
                  command=clean_mission, padx=9, relief=GROOVE)
 button3.place(relx=0.4, rely=0.34, anchor=N)
 button4 = Button(right_frame, text="开始任务", command=lambda: set_a_new_thread(
-    start_missions), padx=9, relief=GROOVE, bg='green')
+    start_missions), padx=9, relief=GROOVE, bg='#AFEEEE')
 button4.place(relx=0.4, rely=0.44, anchor=N)
 button4['state'] = 'disabled'
 button5_1 = Button(right_frame, text="暂停任务",
                    command=pause_mission, padx=9, relief=GROOVE, bg='red')
 button5_1.place(relx=0.4, rely=0.54, anchor=N)
-button6 = Button(right_frame, text="单任务模式", command=single_mode,
-                 padx=3, relief=GROOVE, bg='yellow')
-button6.place(relx=0.4, rely=0.64, anchor=N)
-# button6['state']='disabled'
+button6 = Button(label_text1, text="模式说明", command=single_mode,
+                 padx=3, relief=GROOVE, bg='#87CEFA')
+button6.grid(column=0,row=0,pady=20)
 
 right_frame_1 = Frame(right_frame, width=80, height=100,
-                      bg='#FFE4C4', relief=GROOVE, bd=3)
-right_frame_1.place(relx=0.41, rely=0.95, anchor=S)
+                      )
+right_frame_1.place(relx=0.41, rely=0.90, anchor=S)
+icon_96 = PIL.Image.open('images/material/icon_1.png')
+img_icon_96 = ImageTk.PhotoImage(icon_96)
+icon_c=Canvas(right_frame_1,width=80, height=80)
+icon_c.pack()
+icon_c.create_image(0,0,image=img_icon_96,anchor=NW)
+
 # 新建线程
 
 
@@ -804,7 +811,7 @@ def set_a_new_thread(fun_name, _args=()):
 #         label.update()
 
 
+# set_a_new_thread(monitor)
 root.update()
 
-# set_a_new_thread(monitor)
 root.mainloop()

@@ -119,7 +119,7 @@ def chapter_selet(chapter_name):  # 刷图线路模块
         swipe(10, img.shape[1]-10, img.shape[0]/2, 200)  # 屏幕移动至最左
         screenshot()
         while Image_to_position(chapter[-1]) == False:
-            swipe(img.shape[1]*0.9, img.shape[1]*0.1, img.shape[0]/2, 2000)
+            swipe(img.shape[1]*0.8, img.shape[1]*0.2, img.shape[0]/2, 2000)
             time.sleep(1)
             screenshot()
 
@@ -132,7 +132,7 @@ def chapter_run(n):
     screenshot()
     if Image_to_position('prts_off'):  # 确认点上了代理
         click(center[0], center[1])
-    images_ = ['start-go1', 'start-go2']
+    images_ = ['start-go1', 'start-go2','end']
     images = ['end', 'level up', 'report']
     round = 0
     while True:
@@ -176,7 +176,7 @@ def chapter_run(n):
                     if Image_to_position(image, m=0):
                         print(image)
                         now = image
-                        time.sleep(2)
+                        # time.sleep(2)
                         click(center[0], center[1])
                 if now == 'end':
                     round += 1
