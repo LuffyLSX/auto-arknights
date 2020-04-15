@@ -7,6 +7,10 @@
 
 之后我也会尽量适配1080p的分辨率，并添加其他的功能
 
+# 整合包
+链接：https：//pan.baidu.com/s/1mW8m0TgLD6CRa7vdVVRg4g提取代码：oje4
+github上传不了压缩包，解压后安装好adb就可以使用了，目前有时模拟器会卡死重启即可
+
 # 安装python并添加opencv模块
 
 https://www.liaoxuefeng.com/wiki/1016959663602400/1016959856222624
